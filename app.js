@@ -25,3 +25,36 @@ function createTable(data) {
 
   return tableHTML;
 }
+
+function displayUserData(user) {
+    const userDataDiv = document.getElementById('userData');
+    userDataDiv.textContent = `Name: ${user.name}, Phone: ${user.phone}`;
+  }
+  
+  function getUsersData() {
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const usersTableDiv = document.getElementById('usersTable');
+        usersTableDiv.innerHTML = createTable(data);
+  
+        const userIdInput = document.getElementById('userIdInput');
+        const getUserButton = document.getElementById('getUserButton');
+
+        getUserButton.addEventListener('click', () => {
+            const userId = userIdInput.value;
+            const user = data.find(user => user.id == userId);
+    
+            if (user) {
+              displayUserData(user);
+            } else {
+              displayUserData({ name: 'User not found', phone: '' });
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+    
+    getUsersData();
